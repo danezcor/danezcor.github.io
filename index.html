@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Danezcor – Arquitectura & Construcción</title>
+<meta name="description" content="Danezcor: planos arquitectónicos, diseño, renders, remodelaciones, construcción, supervisión y mantenimiento de obra en Perú.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Instrument+Sans:wght@400..700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Plan: la web como una lámina de arquitectura. Papel claro con retícula, trazo azul de la marca, cajetín técnico. */
+  --paper:#F3F4F1;
+  --surface:#FFFFFF;
+  --ink:#161B26;
+  --muted:#5B6170;
+  --blue:#24479B;
+  --btn:#24479B;
+  --btn-ink:#FFFFFF;
+  --rule:#D5DAE3;
+  --grid:rgba(36,71,155,.07);
+  --draw:#24479B;
+  --draw-soft:rgba(36,71,155,.09);
+  --logo-grey:#5E5E5E;
+  --f-display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0D1322;--surface:#131B2E;--ink:#E8ECF4;--muted:#9AA3B5;--blue:#8FB0FF;
+    --btn:#3A62C8;--btn-ink:#FFFFFF;--rule:#26304A;--grid:rgba(143,176,255,.06);
+    --draw:#8FB0FF;--draw-soft:rgba(143,176,255,.10);--logo-grey:#B9BCC4;color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0D1322;--surface:#131B2E;--ink:#E8ECF4;--muted:#9AA3B5;--blue:#8FB0FF;
+  --btn:#3A62C8;--btn-ink:#FFFFFF;--rule:#26304A;--grid:rgba(143,176,255,.06);
+  --draw:#8FB0FF;--draw-soft:rgba(143,176,255,.10);--logo-grey:#B9BCC4;color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.6}
+img,canvas{max-width:100%;display:block}
+a{color:inherit}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.05}
+.wrap{width:min(1180px,100% - 40px);margin-inline:auto}
+.mono{font-family:var(--f-mono);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}
+
+/* Header */
+header{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:16px;height:68px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand svg{width:30px;height:34px}
+.brand b{font-family:var(--f-display);font-stretch:125%;font-weight:800;font-size:19px;letter-spacing:.04em;color:var(--logo-grey)}
+nav{display:flex;align-items:center;gap:26px}
+nav a.l{text-decoration:none;font-size:15px;color:var(--muted)}
+nav a.l:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-weight:600;font-size:15.5px;border-radius:999px;padding:12px 20px;border:1.5px solid var(--btn);background:var(--btn);color:var(--btn-ink);cursor:pointer;font-family:var(--f-body);transition:transform .15s ease,box-shadow .15s ease}
+.btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px -8px var(--btn)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--rule)}
+.btn.ghost:hover{border-color:var(--ink);box-shadow:none}
+.btn svg{width:18px;height:18px;flex:none}
+@media (max-width:760px){nav a.l{display:none}.btn.sm{padding:9px 14px;font-size:14px}}
+
+/* Hero */
+.hero{background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px;border-bottom:1px solid var(--rule)}
+.hero .wrap{display:grid;grid-template-columns:1fr 1.15fr;gap:48px;align-items:center;padding:64px 0 56px}
+.eyebrow{color:var(--blue);margin-bottom:18px;display:block}
+.hero h1{font-size:clamp(40px,6vw,74px);font-stretch:112%;font-weight:800;letter-spacing:-.01em}
+.hero h1 em{font-style:normal;color:var(--blue)}
+.hero p.lead{color:var(--muted);font-size:18.5px;max-width:34ch;margin:22px 0 30px}
+.ctas{display:flex;flex-wrap:wrap;gap:12px}
+.sheet{background:var(--surface);border:1.5px solid var(--draw);padding:10px}
+.sheet canvas{width:100%;aspect-ratio:10/7;border:1px solid var(--rule)}
+.cajetin{display:grid;grid-template-columns:2.2fr 1fr 1fr;border:1px solid var(--rule);border-top:0}
+.cajetin div{padding:8px 10px;border-left:1px solid var(--rule);min-width:0}
+.cajetin div:first-child{border-left:0}
+.cajetin small{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+.cajetin span{font-family:var(--f-mono);font-size:13px;font-weight:500;color:var(--ink);overflow-wrap:anywhere}
+.ref{font-family:var(--f-mono);font-size:11px;color:var(--muted);margin-top:8px;text-align:right}
+@media (max-width:900px){.hero .wrap{grid-template-columns:1fr;padding:44px 0 40px;gap:36px}}
+
+/* Sections */
+section{padding:88px 0}
+.head{display:grid;grid-template-columns:1fr 1.4fr;gap:32px;align-items:end;margin-bottom:44px}
+.head h2{font-size:clamp(32px,4.4vw,52px);font-stretch:112%;font-weight:800}
+.head p{color:var(--muted);margin:0;max-width:52ch}
+@media (max-width:760px){.head{grid-template-columns:1fr;gap:14px}section{padding:64px 0}}
+
+/* Services: leyenda de plano */
+.leyenda{border-top:1.5px solid var(--ink)}
+.row{display:grid;grid-template-columns:72px 1fr 1.3fr;gap:24px;padding:22px 0;border-bottom:1px solid var(--rule);align-items:baseline}
+.row .code{color:var(--blue)}
+.row h3{font-size:23px;font-stretch:100%;font-weight:700}
+.row p{margin:0;color:var(--muted)}
+.row:hover h3{color:var(--blue)}
+@media (max-width:760px){.row{grid-template-columns:52px 1fr;gap:6px 14px}.row p{grid-column:2}}
+
+/* Process */
+.proceso{background:var(--surface);border-block:1px solid var(--rule)}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative}
+.step{padding:28px 24px 8px 0;border-top:1.5px solid var(--draw);position:relative}
+.step::before{content:"";position:absolute;top:-6px;left:0;width:10px;height:10px;background:var(--surface);border:1.5px solid var(--draw);transform:rotate(45deg)}
+.step .mono{color:var(--blue)}
+.step h3{font-size:24px;font-weight:700;margin:10px 0 8px}
+.step p{margin:0;color:var(--muted);font-size:16px}
+@media (max-width:860px){.steps{grid-template-columns:1fr 1fr;row-gap:36px}}
+@media (max-width:480px){.steps{grid-template-columns:1fr}}
+
+/* Projects */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.card{background:var(--surface);border:1px solid var(--rule);padding:10px}
+.card canvas{width:100%;aspect-ratio:10/7;border:1px solid var(--rule)}
+.card .cap{display:flex;justify-content:space-between;gap:12px;align-items:baseline;padding:12px 4px 4px;flex-wrap:wrap}
+.card h3{font-size:19px;font-weight:700}
+.card .mono{color:var(--muted);font-size:11px}
+@media (max-width:700px){.grid{grid-template-columns:1fr}}
+
+/* Contact */
+.contacto .wrap{display:grid;grid-template-columns:1fr 1.1fr;gap:48px;align-items:start}
+.contacto h2{font-size:clamp(34px,4.6vw,56px);font-stretch:112%;font-weight:800}
+.contacto .intro p{color:var(--muted);max-width:40ch}
+form{background:var(--surface);border:1.5px solid var(--draw);padding:26px;display:grid;gap:16px}
+label{display:grid;gap:6px;font-size:14px;font-weight:600}
+input,select,textarea{font:inherit;font-size:16px;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:8px;padding:12px 14px;width:100%}
+textarea{min-height:110px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--blue);outline-offset:0;border-color:transparent}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.note{font-size:13.5px;color:var(--muted);margin:0}
+@media (max-width:860px){.contacto .wrap{grid-template-columns:1fr}.two{grid-template-columns:1fr}}
+
+footer{border-top:1px solid var(--rule);padding:30px 0 40px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center;color:var(--muted);font-size:14px}
+footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="#inicio" aria-label="Danezcor, inicio">
+      <svg viewBox="0 0 136 156" aria-hidden="true">
+        <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2E57B8"/><stop offset="1" stop-color="#1E3A8A"/></linearGradient></defs>
+        <rect x="0" y="82" width="30" height="74" fill="url(#lg)"/>
+        <path d="M36 40 L74 4 V156 H36 Z" fill="url(#lg)"/>
+        <path d="M79 11 L130 46 V150 H79" fill="none" stroke="url(#lg)" stroke-width="11" stroke-linejoin="miter"/>
+      </svg>
+      <b>DANEZCOR</b>
+    </a>
+    <nav aria-label="Principal">
+      <a class="l" href="#servicios">Servicios</a>
+      <a class="l" href="#proceso">Cómo trabajamos</a>
+      <a class="l" href="#proyectos">Proyectos</a>
+      <a class="l" href="#contacto">Contacto</a>
+      <a class="btn sm js-wa" href="#contacto">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.3-.4.8-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.3.8 3.2.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.2-.2-.2-.5-.4Z"/></svg>
+        WhatsApp
+      </a>
+    </nav>
+  </div>
+</header>
+
+<main id="inicio">
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <span class="mono eyebrow">Arquitectura &amp; Construcción · Perú</span>
+        <h1>Del plano a la obra, con <em>un solo equipo.</em></h1>
+        <p class="lead">Ofrecemos soluciones arquitectónicas sustentables que transforman cada espacio en un proyecto único, combinando diseño, funcionalidad e innovación.</p>
+        <div class="ctas">
+          <a class="btn js-wa" href="#contacto">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/></svg>
+            Cotiza por WhatsApp
+          </a>
+          <a class="btn ghost" href="#servicios">Ver servicios</a>
+        </div>
+      </div>
+      <figure style="margin:0">
+        <div class="sheet">
+          <canvas id="c-hero" data-draw="casa" aria-label="Dibujo de elevación de una vivienda de dos pisos con cotas"></canvas>
+          <div class="cajetin">
+            <div><small>Proyecto</small><span>Vivienda unifamiliar · Elevación principal</span></div>
+            <div><small>Escala</small><span>1:100</span></div>
+            <div><small>Lámina</small><span>A-01</span></div>
+          </div>
+        </div>
+        <figcaption class="ref">Imagen referencial</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <section id="servicios">
+    <div class="wrap">
+      <div class="head">
+        <h2>Servicios</h2>
+        <p>Todo lo que necesitas para diseñar, construir o mejorar tu espacio, desde la primera idea hasta la entrega de la obra.</p>
+      </div>
+      <div class="leyenda">
+        <div class="row"><span class="mono code">S-01</span><h3>Planos arquitectónicos</h3><p>Viviendas, edificios multifamiliares y locales comerciales.</p></div>
+        <div class="row"><span class="mono code">S-02</span><h3>Diseño arquitectónico integral</h3><p>Desarrollamos la idea completa: distribución, fachada, iluminación y materiales.</p></div>
+        <div class="row"><span class="mono code">S-03</span><h3>Modelado 3D y renders</h3><p>Ve tu proyecto terminado antes de construir, con vistas interiores y exteriores.</p></div>
+        <div class="row"><span class="mono code">S-04</span><h3>Remodelaciones y ampliaciones</h3><p>Segundo piso, cocina, baños o fachada: ganamos espacio y renovamos tus ambientes.</p></div>
+        <div class="row"><span class="mono code">S-05</span><h3>Construcción y ejecución de obra</h3><p>Construimos lo que diseñamos, con cronograma y presupuesto claros desde el inicio.</p></div>
+        <div class="row"><span class="mono code">S-06</span><h3>Supervisión y control de obra</h3><p>Verificamos que la obra se ejecute según planos, plazos y calidad acordados.</p></div>
+        <div class="row"><span class="mono code">S-07</span><h3>Mantenimiento de edificaciones</h3><p>Pintura, impermeabilización, instalaciones y reparaciones para viviendas y locales.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="proceso" class="proceso">
+    <div class="wrap">
+      <div class="head">
+        <h2>Cómo trabajamos</h2>
+        <p>Cuatro pasos claros, para que sepas siempre en qué etapa está tu proyecto y cuánto va a costar.</p>
+      </div>
+      <div class="steps">
+        <div class="step"><span class="mono">Paso 01</span><h3>Conversamos</h3><p>Nos cuentas tu idea, tu terreno y tu presupuesto. Si hace falta, visitamos el lugar.</p></div>
+        <div class="step"><span class="mono">Paso 02</span><h3>Diseñamos</h3><p>Planos y renders para que veas el resultado y hagas cambios antes de construir.</p></div>
+        <div class="step"><span class="mono">Paso 03</span><h3>Presupuestamos</h3><p>Recibes un presupuesto detallado por partidas y un cronograma de obra.</p></div>
+        <div class="step"><span class="mono">Paso 04</span><h3>Construimos</h3><p>Ejecutamos y supervisamos la obra hasta entregarte tu espacio terminado.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="proyectos">
+    <div class="wrap">
+      <div class="head">
+        <h2>Lo que diseñamos</h2>
+        <p>Viviendas, edificios, locales comerciales y remodelaciones. Cada proyecto empieza con un buen plano.</p>
+      </div>
+      <div class="grid">
+        <figure class="card" style="margin:0">
+          <canvas data-draw="multi" aria-label="Elevación de edificio multifamiliar de cinco pisos"></canvas>
+          <figcaption class="cap"><h3>Edificio multifamiliar</h3><span class="mono">Elevación · Imagen referencial</span></figcaption>
+        </figure>
+        <figure class="card" style="margin:0">
+          <canvas data-draw="planta" aria-label="Planta de distribución de un departamento"></canvas>
+          <figcaption class="cap"><h3>Remodelación de departamento</h3><span class="mono">Planta · Imagen referencial</span></figcaption>
+        </figure>
+        <figure class="card" style="margin:0">
+          <canvas data-draw="local" aria-label="Fachada de local comercial"></canvas>
+          <figcaption class="cap"><h3>Local comercial</h3><span class="mono">Fachada · Imagen referencial</span></figcaption>
+        </figure>
+        <figure class="card" style="margin:0">
+          <canvas data-draw="ampliacion" aria-label="Elevación de ampliación de segundo piso"></canvas>
+          <figcaption class="cap"><h3>Ampliación de segundo piso</h3><span class="mono">Elevación · Imagen referencial</span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="contacto" class="contacto" style="border-top:1px solid var(--rule)">
+    <div class="wrap">
+      <div class="intro">
+        <span class="mono eyebrow">Contacto</span>
+        <h2>Cuéntanos tu proyecto</h2>
+        <p>Completa estos datos y envíanos el mensaje por WhatsApp. Te respondemos con los siguientes pasos y una propuesta.</p>
+      </div>
+      <form id="f" novalidate>
+        <div class="two">
+          <label for="nombre">Nombre<input id="nombre" name="nombre" autocomplete="name" placeholder="Tu nombre"></label>
+          <label for="distrito">Distrito o ciudad<input id="distrito" name="distrito" placeholder="Dónde está el proyecto"></label>
+        </div>
+        <label for="servicio">Servicio
+          <select id="servicio" name="servicio">
+            <option>Planos arquitectónicos</option>
+            <option>Diseño arquitectónico integral</option>
+            <option>Modelado 3D y renders</option>
+            <option>Remodelación o ampliación</option>
+            <option>Construcción de obra</option>
+            <option>Supervisión de obra</option>
+            <option>Mantenimiento</option>
+            <option>Otro</option>
+          </select>
+        </label>
+        <label for="mensaje">Tu proyecto<textarea id="mensaje" name="mensaje" placeholder="Ej.: Tengo un terreno de 120 m² y quiero una casa de dos pisos."></textarea></label>
+        <a id="send" class="btn" href="#contacto" style="justify-content:center">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/></svg>
+          <span id="send-label">Enviar por WhatsApp</span>
+        </a>
+        <p class="note">Se abrirá WhatsApp con tu mensaje listo para enviar.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Danezcor · Arquitectura &amp; Construcción · Perú</span>
+    <a href="https://www.facebook.com/share/1JKWxpyJ6V/">Facebook</a>
+  </div>
+</footer>
+
+<script>
+/* ===== Contacto ===== */
+// Número de WhatsApp con código de país, sin + ni espacios. Ej.: "51987654321"
+const WHATSAPP = "";
+const FACEBOOK = "https://www.facebook.com/share/1JKWxpyJ6V/";
+
+function waText(){
+  const v = id => (document.getElementById(id)?.value || "").trim();
+  let t = "Hola Danezcor, quiero información sobre: " + v("servicio") + ".";
+  if (v("nombre")) t += "\nNombre: " + v("nombre");
+  if (v("distrito")) t += "\nUbicación: " + v("distrito");
+  if (v("mensaje")) t += "\nProyecto: " + v("mensaje");
+  return t;
+}
+function updateLinks(){
+  const base = WHATSAPP ? "https://wa.me/" + WHATSAPP + "?text=" : null;
+  const send = document.getElementById("send");
+  if (base){
+    send.href = base + encodeURIComponent(waText());
+    document.querySelectorAll(".js-wa").forEach(a => a.href = base + encodeURIComponent("Hola Danezcor, quiero cotizar un proyecto."));
+  } else {
+    send.href = FACEBOOK;
+    document.getElementById("send-label").textContent = "Escríbenos por Facebook";
+    document.querySelector(".note").textContent = "Te llevamos a nuestra página de Facebook, donde puedes escribirnos por WhatsApp.";
+    document.querySelectorAll(".js-wa").forEach(a => a.href = FACEBOOK);
+  }
+}
+document.getElementById("f").addEventListener("input", updateLinks);
+document.getElementById("f").addEventListener("submit", e => e.preventDefault());
+updateLinks();
+
+/* ===== Dibujos técnicos (canvas) ===== */
+const W = 1000, H = 700;
+function tok(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+
+function setup(cv){
+  const r = cv.getBoundingClientRect();
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  cv.width = Math.round(r.width * dpr); cv.height = Math.round(r.width * 0.7 * dpr);
+  const g = cv.getContext("2d");
+  g.setTransform(cv.width / W, 0, 0, cv.height / H, 0, 0);
+  g.clearRect(0, 0, W, H);
+  g.lineCap = "square"; g.lineJoin = "miter";
+  return g;
+}
+function P(g){
+  const C = { line: tok("--draw"), soft: tok("--draw-soft"), muted: tok("--muted"), paper: tok("--surface") };
+  const lw = (w) => g.lineWidth = w;
+  const api = {
+    C,
+    rect(x, y, w, h, o = {}){ g.beginPath(); g.rect(x, y, w, h); if (o.fill){ g.fillStyle = o.fill; g.fill(); } if (o.stroke !== false){ lw(o.w || 2); g.strokeStyle = o.color || C.line; g.setLineDash(o.dash || []); g.stroke(); g.setLineDash([]); } },
+    line(x1, y1, x2, y2, w = 1.5, dash){ g.beginPath(); g.moveTo(x1, y1); g.lineTo(x2, y2); lw(w); g.strokeStyle = C.line; g.setLineDash(dash || []); g.stroke(); g.setLineDash([]); },
+    text(s, x, y, o = {}){ g.font = (o.weight || 500) + " " + (o.size || 15) + "px 'IBM Plex Mono', monospace"; g.fillStyle = o.color || C.line; g.textAlign = o.align || "center"; g.textBaseline = "middle"; g.fillText(s, x, y); },
+    tick(x, y){ g.beginPath(); g.moveTo(x - 6, y + 6); g.lineTo(x + 6, y - 6); lw(2); g.strokeStyle = C.line; g.stroke(); },
+    dimH(x1, x2, y, label){ api.line(x1, y, x2, y, 1); api.line(x1, y - 14, x1, y + 8, 1); api.line(x2, y - 14, x2, y + 8, 1); api.tick(x1, y); api.tick(x2, y); g.fillStyle = C.paper; const tw = label.length * 10 + 12; g.fillRect((x1 + x2) / 2 - tw / 2, y - 22, tw, 18); api.text(label, (x1 + x2) / 2, y - 13, { size: 15 }); },
+    dimV(x, y1, y2, label){ api.line(x, y1, x, y2, 1); api.line(x - 8, y1, x + 14, y1, 1); api.line(x - 8, y2, x + 14, y2, 1); api.tick(x, y1); api.tick(x, y2); g.save(); g.translate(x - 14, (y1 + y2) / 2); g.rotate(-Math.PI / 2); api.text(label, 0, 0, { size: 15 }); g.restore(); },
+    level(x, y, label){ g.beginPath(); g.moveTo(x, y); g.lineTo(x - 9, y - 12); g.lineTo(x + 9, y - 12); g.closePath(); g.fillStyle = C.line; g.fill(); api.line(x - 30, y, x + 30, y, 1); api.text(label, x, y - 24, { size: 13, color: C.muted }); },
+    ground(x1, x2, y){ api.line(x1, y, x2, y, 3); for (let x = x1; x < x2; x += 16) api.line(x, y + 4, x - 10, y + 16, 1); },
+    glass(x, y, w, h, cols = 1){ api.rect(x, y, w, h, { fill: C.soft, w: 2 }); for (let i = 1; i < cols; i++) api.line(x + w * i / cols, y, x + w * i / cols, y + h, 1.5); api.line(x + w * .12, y + h * .78, x + w * .32, y + h * .22, 1); api.line(x + w * .2, y + h * .82, x + w * .38, y + h * .36, 1); },
+    person(x, y){ g.beginPath(); g.arc(x, y - 104, 8, 0, Math.PI * 2); lw(1.5); g.strokeStyle = C.line; g.stroke(); api.line(x, y - 96, x, y - 50, 1.5); api.line(x, y - 50, x - 10, y, 1.5); api.line(x, y - 50, x + 10, y, 1.5); api.line(x, y - 86, x - 14, y - 58, 1.5); api.line(x, y - 86, x + 14, y - 58, 1.5); },
+    tree(x, y, r){ api.line(x, y, x, y - r * 1.1, 2); g.beginPath(); g.arc(x, y - r * 1.6, r, 0, Math.PI * 2); g.fillStyle = C.soft; g.fill(); lw(1.5); g.strokeStyle = C.line; g.setLineDash([4, 5]); g.stroke(); g.setLineDash([]); },
+    arc(cx, cy, r, a1, a2){ g.beginPath(); g.arc(cx, cy, r, a1, a2); lw(1); g.strokeStyle = C.line; g.setLineDash([5, 5]); g.stroke(); g.setLineDash([]); }
+  };
+  return api;
+}
+
+const drawings = {
+  casa(g, d){
+    const C = d.C;
+    d.ground(30, 970, 600);
+    // planta baja
+    d.rect(170, 400, 680, 200, { w: 2.5 });
+    // segundo piso en voladizo
+    d.rect(300, 222, 600, 178, { w: 2.5, fill: d.C.paper });
+    d.rect(282, 204, 636, 18, { fill: C.line });
+    d.glass(340, 262, 300, 108, 4);
+    d.rect(680, 240, 190, 150, { w: 2 });
+    for (let x = 692; x < 870; x += 13) d.line(x, 240, x, 390, 1.2);
+    // ingreso, ventana, cochera
+    d.rect(205, 460, 62, 140, { w: 2 }); d.line(255, 530, 255, 545, 3);
+    d.glass(300, 450, 250, 105, 3);
+    d.rect(610, 445, 210, 155, { w: 2 });
+    for (let y = 460; y < 600; y += 14) d.line(610, y, 820, y, 1);
+    d.person(585, 600);
+    d.tree(110, 600, 42);
+    // cotas y niveles
+    d.dimH(170, 850, 650, "10.20");
+    d.dimH(300, 900, 175, "9.00");
+    d.dimV(955, 400, 600, "3.00");
+    d.dimV(955, 204, 400, "2.95");
+    d.level(65, 400, "NPT +3.00");
+    d.level(65, 222, "NPT +5.70");
+  },
+  multi(g, d){
+    d.ground(30, 970, 620);
+    d.rect(130, 300, 220, 320, { dash: [8, 6], w: 1.2, color: d.C.muted });
+    d.rect(650, 380, 220, 240, { dash: [8, 6], w: 1.2, color: d.C.muted });
+    d.text("COLINDANTE", 240, 460, { size: 13, color: d.C.muted });
+    d.text("COLINDANTE", 760, 500, { size: 13, color: d.C.muted });
+    const x = 350, w = 300, fh = 90, top = 620 - fh * 5;
+    d.rect(x, top, w, fh * 5, { w: 2.5, fill: d.C.paper });
+    d.rect(x - 10, top - 14, w + 20, 14, { fill: d.C.line });
+    for (let i = 0; i < 5; i++){
+      const y = top + i * fh;
+      if (i > 0) d.line(x, y, x + w, y, 1.5);
+      if (i < 4){
+        d.glass(x + 24, y + 18, 150, 60, 2);
+        d.rect(x + 196, y + 18, 80, 60, { w: 1.5 });
+        d.line(x + 14, y + 58, x + 184, y + 58, 2.5);
+        for (let k = x + 24; k < x + 184; k += 16) d.line(k, y + 58, k, y + fh, 1);
+      } else {
+        d.glass(x + 24, y + 22, 120, 68, 2);
+        d.rect(x + 176, y + 20, 100, 70, { w: 2 });
+      }
+    }
+    d.person(320, 620);
+    d.dimV(920, top, 620, "13.50");
+    d.dimH(350, 650, 665, "10.00");
+    for (let i = 0; i < 5; i++) d.text("P" + (i + 1), 690 - 0, 620 - i * fh - fh / 2, { size: 12, color: d.C.muted });
+  },
+  planta(g, d){
+    const L = 150, T = 110, R = 850, B = 610;
+    d.rect(L, T, R - L, B - T, { w: 9 });
+    d.line(470, T, 470, 400, 7);
+    d.line(470, 470, 470, B, 7);
+    d.line(L, 360, 300, 360, 7); d.line(370, 360, 470, 360, 7);
+    d.line(620, T, 620, 300, 7); d.line(620, 360, 620, 380, 7);
+    d.line(470, 380, R, 380, 7);
+    d.line(620, 260, R, 260, 5);
+    // puertas
+    d.arc(300, 360, 70, Math.PI, Math.PI * 1.5); d.line(300, 360, 300, 290, 1.5);
+    d.arc(470, 400, 70, 0, Math.PI / 2); d.line(470, 400, 540, 400, 1.5);
+    d.arc(620, 300, 60, Math.PI / 2, Math.PI); d.line(620, 300, 620, 360, 1.5);
+    // muebles
+    d.rect(180, 470, 180, 80, { w: 1.2, fill: d.C.soft });
+    d.rect(520, 140, 70, 190, { w: 1.2, fill: d.C.soft });
+    d.rect(700, 420, 120, 150, { w: 1.2, fill: d.C.soft });
+    d.rect(660, 140, 60, 80, { w: 1.2 });
+    // rótulos
+    d.text("DORM. 1", 310, 230, { size: 16, weight: 600 });
+    d.text("SALA-COMEDOR", 310, 420, { size: 16, weight: 600 });
+    d.text("COCINA", 545, 345, { size: 14, weight: 600 });
+    d.text("SS.HH.", 735, 235, { size: 14, weight: 600 });
+    d.text("DORM. 2", 660, 470, { size: 16, weight: 600 });
+    d.text("12.5 m²", 310, 254, { size: 12, color: d.C.muted });
+    d.text("24.8 m²", 310, 444, { size: 12, color: d.C.muted });
+    d.dimH(L, R, 660, "9.30");
+    d.dimV(110, T, B, "6.70");
+    // norte
+    d.line(920, 180, 920, 110, 2); d.text("N", 920, 92, { size: 16, weight: 600 });
+    d.line(920, 110, 908, 130, 2); d.line(920, 110, 932, 130, 2);
+  },
+  local(g, d){
+    d.ground(30, 970, 610);
+    d.rect(150, 260, 700, 350, { w: 2.5 });
+    d.rect(130, 240, 740, 20, { fill: d.C.line });
+    d.rect(190, 290, 620, 60, { w: 2, fill: d.C.soft });
+    d.text("TU NEGOCIO", 500, 321, { size: 26, weight: 600 });
+    d.rect(170, 380, 660, 16, { w: 1.5 });
+    for (let x = 180; x < 830; x += 22) d.line(x, 396, x + 11, 412, 1);
+    d.glass(190, 420, 440, 190, 4);
+    d.rect(660, 420, 150, 190, { w: 2 });
+    d.line(735, 420, 735, 610, 1.5);
+    d.person(560, 610); d.person(250, 610);
+    d.dimH(150, 850, 655, "8.00");
+    d.dimV(905, 240, 610, "4.80");
+  },
+  ampliacion(g, d){
+    d.ground(30, 970, 610);
+    d.rect(200, 430, 600, 180, { w: 2.5 });
+    d.rect(200, 250, 600, 180, { w: 2.5, dash: [12, 8], fill: d.C.soft });
+    d.rect(185, 232, 630, 18, { w: 2, dash: [12, 8] });
+    d.glass(250, 290, 220, 100, 2);
+    d.glass(540, 290, 200, 100, 2);
+    d.rect(240, 480, 70, 130, { w: 2 });
+    d.glass(360, 470, 380, 90, 3);
+    d.text("AMPLIACIÓN 2.º PISO", 500, 205, { size: 15, weight: 600 });
+    d.text("EXISTENTE", 500, 585, { size: 13, color: d.C.muted });
+    d.dimV(860, 430, 610, "2.70");
+    d.dimV(860, 232, 430, "2.75");
+    d.level(110, 430, "NPT +2.70");
+    d.person(150, 610);
+  }
+};
+
+function drawAll(){
+  document.querySelectorAll("canvas[data-draw]").forEach(cv => {
+    const g = setup(cv);
+    const fn = drawings[cv.dataset.draw];
+    if (fn) fn(g, P(g));
+  });
+}
+drawAll();
+let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(drawAll, 120); });
+if (document.fonts) document.fonts.ready.then(drawAll);
+matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", drawAll);
+new MutationObserver(drawAll).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+</script>
+</body>
+</html>
